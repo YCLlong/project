@@ -1,12 +1,16 @@
 package com.wenda.project.framework.utils;
 
+import com.wenda.project.framework.web.base.BasePool;
 import org.apache.commons.lang3.StringUtils;
+
 
 /**
  * 数据库相关工具类
  */
 public class DataBaseUtils {
     public static final String LIST_SQL = "SELECT * FROM ";
+    public static final String INSERT_SQL = "INSERT INTO ";
+
     /**
      * 将实体类的名字或者字段名字驼峰式的映射成在数据库中的表名或者字段名
      * @param name
@@ -31,6 +35,23 @@ public class DataBaseUtils {
 
 
     /**
+     * 获取映射的实体类在数据库中的表名
+     * @return
+     */
+    public static String getTableName(Class clz){
+        String[] names = clz.getTypeName().split("\\.");
+        String name = names[names.length-1];
+        String t = BasePool.TABLE_NAME.get(name);
+        if(StringUtils.isBlank(t)){
+            String dbName = DataBaseUtils.getDataBaseMapperName(name);
+            BasePool.TABLE_NAME.put(name,dbName);
+            return dbName;
+        }
+        return t;
+    }
+
+
+    /**
      * 查询列表sql
      * @param tableName
      * @param orderColumnName
@@ -51,4 +72,6 @@ public class DataBaseUtils {
             }
         }
     }
+
+
 }

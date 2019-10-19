@@ -22,5 +22,14 @@ class ProjectApplicationTests {
         System.out.println(userList);
     }
 
+    @Test
+    void testEntityAdd() throws Exception {
+        CommonDao<TbAccount> userDao = new CommonDao(TbAccount.class);
+        TbAccount account = new TbAccount();
+        account.setId("111222");
+        account.setUserName("testAdd");
+        userDao.add(account);
+    }
+
 
 }

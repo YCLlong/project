@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 public class DataBaseUtils {
     public static final String LIST_SQL = "SELECT * FROM ";
     public static final String INSERT_SQL = "INSERT INTO ";
+    public static final String UPDATE_SQL = "UPDATE ";
 
     /**
      * 将实体类的名字或者字段名字驼峰式的映射成在数据库中的表名或者字段名
@@ -73,5 +74,10 @@ public class DataBaseUtils {
         }
     }
 
-
+    public static String listSql(String tableName){
+        if(StringUtils.isBlank(tableName)){
+            return null;
+        }
+        return LIST_SQL + tableName;
+    }
 }

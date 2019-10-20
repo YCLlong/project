@@ -1,10 +1,13 @@
 package com.wenda.project.framework.web.base.dao;
 
+import com.wenda.project.framework.constant.StatusEnum;
 import com.wenda.project.framework.utils.ApplicationContextUtil;
 import com.wenda.project.framework.utils.DataBaseUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +29,50 @@ public class CommonDao<T>{
     public List<T> findList(){
         return jdbcTemplate.query(DataBaseUtils.listSql(DataBaseUtils.getTableName(clz),"modify_time",true),new BaseRowMapper<>(clz));
     }
+
+    /**
+     * 按条件查询列表
+     * @param sqls
+     * @param values
+     * @return
+     */
+    public List<T> findList(String[] sqls,Object[] values){
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append( DataBaseUtils.listSql(DataBaseUtils.getTableName(clz))).append(" where ");
+        for(int i=1;i<sqls.length;i++){
+            sqlBuilder.append(" AND ").append(sqls[i]);
+        }
+        return jdbcTemplate.query(sqlBuilder.toString(),values,new BaseRowMapper<>(clz));
+    }
+
+    /**
+     * 查找唯一的对象
+     * @param sqls
+     * @param values
+     * @return
+     * @throws Exception
+     */
+    public T find(String[] sqls,Object[] values) throws Exception {
+        List<T> dataList = findList(sqls,values);
+        if(dataList == null || dataList.size() == 0){
+            return null;
+        }
+        if(dataList.size() > 1){
+            throw new Exception("找到多条记录");
+        }else {
+            return dataList.get(0);
+        }
+    }
+
+    /**
+     * 通过id查找对象
+     * @param id
+     * @return
+     */
+    public T findById(String id) throws Exception {
+        return find(new String[]{"id=?"},new Object[]{id});
+    }
+
 
     /**
      * 查询列表-开放式
@@ -64,10 +111,80 @@ public class CommonDao<T>{
                 sqlBuilder.append(",?");
             }
             sqlBuilder.append(")");
-            System.out.println(sqlBuilder.toString());
+            jdbcTemplate.update(sqlBuilder.toString(),fieldValues);
+        }
+    }
+
+    /**
+     * 删除
+     * @param id
+     * @param pseudo
+     * @return
+     * @throws Exception
+     */
+    public T deleteById(String id,boolean pseudo) throws Exception {
+        T obj = find(new String[]{"id"},new Object[]{id});
+        if(obj == null){
+            throw new Exception("找不到记录，无法删除");
+        }
+        if(pseudo){
+            jdbcTemplate.update("UPDATE " + DataBaseUtils.getTableName(clz) + " SET status = " + StatusEnum.DELETE.getId() + " WHERE id = ?",id);
+        }else {
+            jdbcTemplate.update("DELETE FROM " + DataBaseUtils.getTableName(clz) + " WHERE id = ?",id );
+        }
+        return obj;
+    }
+
+    /**
+     * 修改
+     * @param obj
+     */
+    public void update(T obj) throws Exception {
+        Class clz = obj.getClass();
+        Field idField = clz.getDeclaredField("id");//找不到id字段自己会抛出异常
+        idField.setAccessible(true);
+        String id = (String) idField.get(obj);
+        if(StringUtils.isBlank(id)){
+            throw new Exception("id 不能为空");
+        }
+        T data = findById(id);
+        if(data == null){
+            throw new Exception("找不到对象无法修改");
+        }
+
+        Field[] fields = clz.getDeclaredFields();
+        if (fields.length > 1) {
+            List<String> fieldNames = new ArrayList<>(fields.length);
+            List<Object> fieldValues = new ArrayList<>(fields.length);
+            for (int i=1;i<fields.length;i++) {
+                //从1开始，第0个字段是id，放最后
+                Field field = fields[i];
+                field.setAccessible(true);
+                Object v =  field.get(obj);
+                if(v == null){
+                    continue;
+                }
+                fieldNames.add(DataBaseUtils.getDataBaseMapperName(field.getName()));
+                fieldValues.add(v);
+            }
+            fieldValues.add(id);
+
+            StringBuilder sqlBuilder = new StringBuilder();
+            sqlBuilder.append(DataBaseUtils.UPDATE_SQL).append(DataBaseUtils.getTableName(clz));
+            sqlBuilder.append(" SET ").append(fieldNames.get(0)).append("=?");
+            for (int i=1;i<fieldNames.size();i++){
+                sqlBuilder.append(",").append(fieldNames.get(i)).append("=?");
+            }
+            sqlBuilder.append(" WHERE id = ?");
             jdbcTemplate.update(sqlBuilder.toString(),fieldValues);
         }
     }
 
 
+
+
+
+    public void execute(String sql){
+        jdbcTemplate.execute(sql);
+    }
 }

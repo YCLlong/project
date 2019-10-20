@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,15 +34,15 @@ public class CommonDao<T>{
 
     /**
      * 按条件查询列表
-     * @param sqls
-     * @param values
+     * @param conditions    sql语句格式，例如 user_name = ?  或者 create_time > ?
+     * @param values        这个值需要和 conditions 的站位符一一对应
      * @return
      */
-    public List<T> findList(String[] sqls,Object[] values){
+    public List<T> findList(String[] conditions,Object[] values){
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append( DataBaseUtils.listSql(DataBaseUtils.getTableName(clz))).append(" where ");
-        for(int i=1;i<sqls.length;i++){
-            sqlBuilder.append(" AND ").append(sqls[i]);
+        sqlBuilder.append( DataBaseUtils.listSql(DataBaseUtils.getTableName(clz))).append(" where ").append(conditions[0]);
+        for(int i=1;i<conditions.length;i++){
+            sqlBuilder.append(" AND ").append(conditions[i]);
         }
         return jdbcTemplate.query(sqlBuilder.toString(),values,new BaseRowMapper<>(clz));
     }
@@ -175,8 +177,8 @@ public class CommonDao<T>{
             for (int i=1;i<fieldNames.size();i++){
                 sqlBuilder.append(",").append(fieldNames.get(i)).append("=?");
             }
-            sqlBuilder.append(" WHERE id = ?");
-            jdbcTemplate.update(sqlBuilder.toString(),fieldValues);
+            sqlBuilder.append(" WHERE id=?");
+            jdbcTemplate.update(sqlBuilder.toString(), fieldValues.toArray(new Object[]{}));
         }
     }
 

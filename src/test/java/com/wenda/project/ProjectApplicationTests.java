@@ -5,6 +5,7 @@ import com.wenda.project.framework.web.base.dao.CommonDao;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -50,8 +51,9 @@ class ProjectApplicationTests {
         CommonDao<TbAccount> userDao = new CommonDao(TbAccount.class);
         TbAccount account = new TbAccount();
         account.setId("111222");
-        account.setUserName("testAdd1");
+        account.setUserName("testAdd22");
         account.setStatus(2000);
+        account.setModifyTime(new Date());
         userDao.update(account);
     }
 }

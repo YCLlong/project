@@ -1,6 +1,6 @@
 package com.wenda.project;
 
-import com.wenda.project.entity.TbAccount;
+import com.wenda.project.entity.TbUser;
 import com.wenda.project.framework.web.base.dao.CommonDao;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,29 +18,29 @@ class ProjectApplicationTests {
 
     @Test
     void testEntitySelectList(){
-        CommonDao<TbAccount> userDao = new CommonDao(TbAccount.class);
-        List<TbAccount> userList = userDao.findList();
+        CommonDao<TbUser> userDao = new CommonDao(TbUser.class);
+        List<TbUser> userList = userDao.findList();
         System.out.println(userList);
     }
 
     @Test
     void testSelectList(){
-        CommonDao<TbAccount> userDao = new CommonDao(TbAccount.class);
-        List<TbAccount> userList = userDao.findList("select * from tb_account where user_name like '2%'",null,TbAccount.class);
+        CommonDao<TbUser> userDao = new CommonDao(TbUser.class);
+        List<TbUser> userList = userDao.findList("select * from tb_account where user_name like '2%'",null,TbUser.class);
         System.out.println(userList);
     }
 
     @Test
     void testSelectListByCondition(){
-        CommonDao<TbAccount> userDao = new CommonDao(TbAccount.class);
-        List<TbAccount> userList = userDao.findList(new String[]{"email = ?","status = ?"},new Object[]{"251121753@QQ.COM",2000});
+        CommonDao<TbUser> userDao = new CommonDao(TbUser.class);
+        List<TbUser> userList = userDao.findList(new String[]{"email = ?","status = ?"},new Object[]{"251121753@QQ.COM",2000});
         System.out.println(userList);
     }
 
     @Test
     void testEntityAdd() throws Exception {
-        CommonDao<TbAccount> userDao = new CommonDao(TbAccount.class);
-        TbAccount account = new TbAccount();
+        CommonDao<TbUser> userDao = new CommonDao(TbUser.class);
+        TbUser account = new TbUser();
         account.setId("111222");
         account.setUserName("testAdd");
         userDao.add(account);
@@ -48,8 +48,8 @@ class ProjectApplicationTests {
 
     @Test
     void testEntityUpdate() throws Exception {
-        CommonDao<TbAccount> userDao = new CommonDao(TbAccount.class);
-        TbAccount account = new TbAccount();
+        CommonDao<TbUser> userDao = new CommonDao(TbUser.class);
+        TbUser account = new TbUser();
         account.setId("111222");
         account.setUserName("testAdd22");
         account.setStatus(2000);

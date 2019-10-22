@@ -7,10 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * 实体dao，针对单个实体类的增删改查
@@ -40,22 +37,41 @@ public class CommonDao<T>{
      */
     public List<T> findList(String[] conditions,Object[] values){
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append( DataBaseUtils.listSql(DataBaseUtils.getTableName(clz))).append(" where ").append(conditions[0]);
-        for(int i=1;i<conditions.length;i++){
-            sqlBuilder.append(" AND ").append(conditions[i]);
+        sqlBuilder.append( DataBaseUtils.listSql(DataBaseUtils.getTableName(clz)));
+        if(conditions != null && conditions.length > 0){
+            sqlBuilder.append(" where ").append(conditions[0]);
+            for(int i=1;i<conditions.length;i++){
+                sqlBuilder.append(" AND ").append(conditions[i]);
+            }
         }
         return jdbcTemplate.query(sqlBuilder.toString(),values,new BaseRowMapper<>(clz));
     }
 
     /**
+     * 按条件查询列表
+     * @param conditionSet    sql语句格式，例如 user_name = ?  或者 create_time > ?
+     * @param valueSet        这个值需要和 conditions 的站位符一一对应
+     * @return
+     */
+    public List<T> findList(Set<String> conditionSet, Set<Object> valueSet){
+        if(conditionSet == null){
+            conditionSet = new HashSet<String>(0);
+            valueSet = new HashSet<Object>(0);
+        }
+        String[] conditions = conditionSet.toArray(new String[0]);
+        String[] values = valueSet.toArray(new String[0]);
+        return findList(conditions,values);
+    }
+
+    /**
      * 查找唯一的对象
-     * @param sqls
+     * @param conditions
      * @param values
      * @return
      * @throws Exception
      */
-    public T find(String[] sqls,Object[] values) throws Exception {
-        List<T> dataList = findList(sqls,values);
+    public T find(String[] conditions,Object[] values) throws Exception {
+        List<T> dataList = findList(conditions,values);
         if(dataList == null || dataList.size() == 0){
             return null;
         }
@@ -141,7 +157,7 @@ public class CommonDao<T>{
      * 修改
      * @param obj
      */
-    public void update(T obj) throws Exception {
+    public T update(T obj) throws Exception {
         Class clz = obj.getClass();
         Field idField = clz.getDeclaredField("id");//找不到id字段自己会抛出异常
         idField.setAccessible(true);
@@ -180,6 +196,7 @@ public class CommonDao<T>{
             sqlBuilder.append(" WHERE id=?");
             jdbcTemplate.update(sqlBuilder.toString(), fieldValues.toArray(new Object[]{}));
         }
+        return data;
     }
 
 

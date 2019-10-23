@@ -1,6 +1,5 @@
 package com.wenda.project.framework.web.user;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wenda.project.entity.TbUser;
 import com.wenda.project.framework.web.StringPool;
@@ -31,7 +30,7 @@ public class UserController extends BaseController {
 
     @RequestMapping("login")
     public String loginIndex() {
-        return "user";
+        return "login";
     }
 
     @RequestMapping("loginForm")
@@ -85,10 +84,15 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping("index")
+    public String index(Model model) {
+        return "index";
+    }
+
+    @RequestMapping("userIndex")
     public String index(UserQueryVo query, Model model) {
         model.addAttribute("query", query);
         model.addAttribute("list",userServer.findList(query));
-        return "index";
+        return "/user/index";
     }
 
 

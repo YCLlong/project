@@ -59,7 +59,7 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl("/sys/user");
+        shiroFilterFactoryBean.setLoginUrl("/sys/login");
         //无权访问时跳转的页面
         shiroFilterFactoryBean.setUnauthorizedUrl("/error");
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();

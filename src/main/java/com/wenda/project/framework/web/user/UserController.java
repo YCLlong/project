@@ -96,6 +96,7 @@ public class UserController extends BaseController {
     }
 
 
+
     @RequestMapping("userAddIndex")
     @RequiresPermissions("/sys/user/add")
     public String addIndex(Model model) {

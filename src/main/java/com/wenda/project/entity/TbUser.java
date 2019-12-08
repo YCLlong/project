@@ -19,6 +19,5 @@ public class TbUser {
     private String password;
     private String mobile;
     private String email;
-    private String vchat;
     private String remark;
 }

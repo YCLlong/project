@@ -5,6 +5,7 @@ import com.wenda.project.entity.TbUser;
 import com.wenda.project.framework.web.StringPool;
 import com.wenda.project.framework.web.base.ResponseInfo;
 import com.wenda.project.framework.web.base.controller.BaseController;
+import com.wenda.project.framework.web.freemaker.func.ConvertFunc;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -29,7 +30,8 @@ public class UserController extends BaseController {
     private UserServer userServer;
 
     @RequestMapping("login")
-    public String loginIndex() {
+    public String loginIndex(Model model) {
+        model.addAttribute("convert",new ConvertFunc());
         return "login";
     }
 
@@ -38,7 +40,7 @@ public class UserController extends BaseController {
         model.addAttribute("userName", userName);
         if (StringUtils.isBlank(userName) || StringUtils.isBlank(password)) {
             model.addAttribute("errMsg", "用户名或者密码不能为空");
-            return loginIndex();
+            return loginIndex(model);
         }
         try {
             Subject subject = SecurityUtils.getSubject();
@@ -46,7 +48,7 @@ public class UserController extends BaseController {
             subject.login(token);
         } catch (Exception e) {
             model.addAttribute("errMsg", e.getMessage());
-            return loginIndex();
+            return loginIndex(model);
         }
         session.setAttribute(StringPool.USER_KEY, userServer.login(userName));
         return "redirect:/sys/index";

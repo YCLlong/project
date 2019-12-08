@@ -10,10 +10,10 @@ spring:
     charset: utf-8
     cache: false
     template-loader-path: classpath:templates
-    request-context-attribute: rc
+    request-context-attribute: request
 
   mvc:
-    static-path-pattern: static/**
+    static-path-pattern: /static/**
 
   servlet:
     multipart:

@@ -167,7 +167,7 @@ public class CommonDao<T>{
         }
         T data = findById(id);
         if(data == null){
-            throw new Exception("找不到对象无法修改");
+            throw new Exception("找不到记录无法修改");
         }
 
         Field[] fields = clz.getDeclaredFields();

@@ -5,11 +5,12 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>自适应学习系统</title>
-    <link rel="stylesheet" href="${rc.contextPath}/static/css/style.css">
+    <#include "common/header.ftl"/>
+    <link rel="stylesheet" href="${path}/static/css/style.css">
     <style>
         .bgpic{
             margin:0px;
-            background: url(${rc.contextPath}/static/images/0.jpg) no-repeat;
+            background: url(${path}/static/images/0.jpg) no-repeat;
             background-size:100% 100%;
             background-attachment:fixed;
         }
@@ -24,7 +25,7 @@
                     <div
                             class="text-center h4 ">
                         自适应学习系统</div>
-                    <form id="form" action="${rc.contextPath}/sys/loginForm" method="post">
+                    <form id="form" action="/sys/loginForm" method="post">
                         <div class="card-body py-5">
                             <div class="form-group">
                                 <label class="form-control-label">用户名</label> <input
@@ -46,8 +47,8 @@
         </div>
     </div>
 </div>
-<script src="${rc.contextPath}/static/js/jquery-1.11.1.min.js"></script>
-<script src="${rc.contextPath}/static/js/bootstrap.js"></script>
-<script src="${rc.contextPath}/static/js/tools.js"></script>
+<script src="${path}/static/js/jquery-1.11.1.min.js"></script>
+<script src="${path}/static/js/bootstrap.js"></script>
+<script src="${path}/static/js/tools.js"></script>
 </body>
 </html>

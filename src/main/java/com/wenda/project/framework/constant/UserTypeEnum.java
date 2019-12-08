@@ -1,7 +1,7 @@
 package com.wenda.project.framework.constant;
 
 
-public enum  UserTypeEnum {
+public enum  UserTypeEnum implements IConvertable{
     USER(10, "普通用户"),
     ADMIN(20, "超级管理员");
 
@@ -13,10 +13,12 @@ public enum  UserTypeEnum {
         this.name = name;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public String getName() {
         return name;
     }

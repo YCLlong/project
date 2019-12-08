@@ -1,6 +1,6 @@
 package com.wenda.project.framework.constant;
 
-public enum StatusEnum{
+public enum StatusEnum implements IConvertable{
 
     NORMAL(2000, "正常"),
     DISABLE(0, "禁用"),
@@ -14,10 +14,12 @@ public enum StatusEnum{
         this.name = name;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public String getName() {
         return name;
     }

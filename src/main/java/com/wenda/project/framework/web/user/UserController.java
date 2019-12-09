@@ -2,6 +2,7 @@ package com.wenda.project.framework.web.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wenda.project.entity.TbUser;
+import com.wenda.project.framework.annotation.BackShow;
 import com.wenda.project.framework.web.StringPool;
 import com.wenda.project.framework.web.base.ResponseInfo;
 import com.wenda.project.framework.web.base.controller.BaseController;
@@ -36,8 +37,8 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping("loginForm")
-    public String loginForm(String userName, String password, Model model, HttpSession session) throws Exception {
-        model.addAttribute("userName", userName);
+    public String loginForm(@BackShow String userName, @BackShow String password, Model model, HttpSession session) throws Exception {
+        System.out.println("目标方法执行");
         if (StringUtils.isBlank(userName) || StringUtils.isBlank(password)) {
             model.addAttribute("errMsg", "用户名或者密码不能为空");
             return loginIndex(model);

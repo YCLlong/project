@@ -25,21 +25,25 @@
                     <div
                             class="text-center h4 ">
                         自适应学习系统</div>
-                    <form id="form" action="/sys/loginForm" method="post">
+                    <form id="form" action="${path}/sys/loginForm" method="post">
                         <div class="card-body py-5">
                             <div class="form-group">
                                 <label class="form-control-label">用户名</label> <input
                                         type="text" class="form-control" id="userName" autocomplete = "off"
-                                        name="userName" required>
+                                        name="userName" value="${userName!}" required>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-control-label">密码</label> <input
                                         type="password" class="form-control" id="password"
-                                        name="password" required>
+                                        name="password" value="${password!}" required>
                             </div>
                             <input type="submit" class="btn btn-primary"
                                    style="width: 100%" />
+
+                            <#if errMsg??>
+                                <b style="color: red">${errMsg}</b>
+                            </#if>
                         </div>
                     </form>
                 </div>
@@ -47,6 +51,7 @@
         </div>
     </div>
 </div>
+
 <script src="${path}/static/js/jquery-1.11.1.min.js"></script>
 <script src="${path}/static/js/bootstrap.js"></script>
 <script src="${path}/static/js/tools.js"></script>

@@ -1,4 +1,4 @@
-package com.wenda.project.framework.web.security;
+package com.wenda.project.framework.config;
 
 import com.wenda.project.framework.web.security.ream.CustomRealm;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;

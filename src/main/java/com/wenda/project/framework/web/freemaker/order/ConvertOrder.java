@@ -21,6 +21,14 @@ public class ConvertOrder implements TemplateDirectiveModel {
      * @param body          通过这个变量可以决定是否将一些内容输出到网页
      * @throws TemplateException
      * @throws IOException
+     *
+     *  在配置文件中注册，其名称为 convert1，之前注册过一个函数名称是convert，不能重叠
+     *    configurer.getConfiguration().setSharedVariable("convert1", convertOrder);
+     *
+     * 前端使用
+     *          <@convert1 key="status" id=2000; name>
+     *             ${name}
+     *         </@convert1>
      */
     @Override
     public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
